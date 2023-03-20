@@ -11,7 +11,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.models import Sequential, save_model, load_model
 from keras.preprocessing import sequence
 from keras_preprocessing.sequence import pad_sequences
-from focal_loss import BinaryFocalLoss
+
 import tensorflow as tf
 import numpy as np
 import protutil
@@ -243,16 +243,14 @@ class AttentionWithContext(Layer):
 
 
 model = load_model(
-    'model_save.h5', 
+    'Model.h5', 
     custom_objects={'AttentionWithContext' : AttentionWithContext})
-    
-    
-import joblib
-Rmf_model = joblib.load("random_forest.joblib")
+
+
 
 
 st.sidebar.subheader(("Abstract"))
-st.sidebar.markdown("In proteomics peptides are used as surrogates for protein quantification and therefore peptides selection is crucial for good protein quantification.At the same time large-scare proteomics studies involve hundreds of samples and take several weeks of measurement time. The study of peptide stability during the duration of the project is essencial for quantification results with high accuracy and precision. The goal of this webserver is to predict the stability of peptides.")
+st.sidebar.markdown("In proteomics peptides are used as surrogates for protein quantification and therefore peptides selection is crucial for good protein quantification.At the same time large-scare proteomics studies involve hundreds of samples and take several weeks of measurement time. Thefore, the study of peptide stability during the duration of the project is essencial for quantification results with high accuracy and precision. The goal of this webserver is to predict the stability of peptides.")
 
 
 
@@ -262,7 +260,7 @@ st.sidebar.subheader(("Please Read requirements"))
 
 
 st.sidebar.markdown("- Please Enter Valid amino acid letters (ACDEFGHIKLMNOPQRSTUVWY)")
-st.sidebar.markdown("- Please Enter only peptide of length <= 20")
+st.sidebar.markdown("- Please Enter only peptide of length <20")
 st.sidebar.markdown("- No Post-translational modifications are supported")
 
 #st.sidebar.text_area("Sequence Input", height=200)
@@ -270,20 +268,19 @@ st.sidebar.markdown("- No Post-translational modifications are supported")
 
 seq = ""
 len_seq = 0
-#image = Image.open('methComplete.png')
-#st.subheader("""iCarboxE-Deep""")
+
 caption= "The proposed methodology to develop Peptide/Protein Stability classifier"
 #st.image(image, use_column_width=True, caption=caption)
 
-st.subheader(("Input Sequence"))
+st.subheader(("Input Sequence(s)"))
 #fasta_string  = st.sidebar.text_area("Sequence Input", height=200)
 seq_string = st.text_area("Ex: LAENVKIK", height=200)          
 
 
 
 if st.button("PREDICT"):
-    if (len(seq_string)>20):
-        st.error("Please input the sequence between 7 and 20 character")
+    if (len(seq_string)>30):
+        st.error("Please input the sequence between 7 and 30 character")
         exit()
     if (seq_string==""):
         st.error("Please input the sequence first")
@@ -304,15 +301,9 @@ if st.button("PREDICT"):
                 a.append(dic.get(str1[i]))
             return a
 
-
-        Sequence = trans(seq_string) +[len(seq_string)+22]
-        Sequence = np.pad(Sequence, (50-len(Sequence), 0), 'constant')
-        model_XTest = []
-        model_XTest.append(Sequence[-44:])
-        predict_6points = Rmf_model.predict(np.array(model_XTest))
-        mX_test = []
-        mX_test.append(list(model_XTest[0]) + list(predict_6points[0]))
-        Sequence_y = model.predict(np.array(mX_test))
+        Sequence = [trans(seq_string)]
+        Sequence = tf.keras.preprocessing.sequence.pad_sequences(Sequence, maxlen=50)
+        Sequence_y = model.predict(Sequence)
 
         def predict_prob(number):
             return [number[0],1-number[0]]
@@ -324,7 +315,7 @@ if st.button("PREDICT"):
 
         
         
-        if predict_probability[0][0] > 0.6:
+        if predict_probability[0][0] > 0.5:
             st.subheader('Peptide {} is unstable with a probability of {}%'.format(seq_string , round(predict_probability[0][0]*100)))
         else:
             st.subheader('Peptide {} is stable with a probability of {}%'.format(seq_string , round(predict_probability[0][1]*100)))
