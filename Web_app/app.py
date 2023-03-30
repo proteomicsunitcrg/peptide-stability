@@ -1,38 +1,7 @@
-from io import StringIO
-from Bio import SeqIO
-import pandas as pd
-import streamlit as st
-import h5py
-
-
-from PIL import Image
-from tensorflow.keras.layers import LSTM, Dense, Dropout
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.models import Sequential, save_model, load_model
-from keras.preprocessing import sequence
-from keras_preprocessing.sequence import pad_sequences
-
-import tensorflow as tf
-import numpy as np
-import protutil
-import base64
-import joblib 
-
-
-st.set_page_config(page_title='Peptide Stability prediction')
-st.title("Peptide Stability prediction")
-
-
-alphabet = "XACDEFGHIKLMNOPQRSTUVWY"
-
-
-
 ############# Library Import 
 import numpy as np
 import pandas as pd
-import tensorflow as tf
-from keras.preprocessing import sequence
-from keras.models import Sequential
+import streamlit as st
 from keras.layers.core import Dense, Dropout, Activation
 from keras.layers import Embedding
 from keras.layers import LSTM, GRU, SimpleRNN
@@ -48,8 +17,6 @@ from sklearn.metrics import confusion_matrix
 from sklearn import metrics
 from keras.preprocessing.text import Tokenizer
 from keras_preprocessing.sequence import pad_sequences
-
-# import tensorflow as tf
 import random  
 import re,sys
 from keras.layers import Layer, InputSpec
@@ -79,12 +46,19 @@ from keras.layers import Dense, Input,  Bidirectional, Activation, Conv1D, GRU, 
 from keras.layers import Dropout, Embedding, GlobalMaxPooling1D, MaxPooling1D, Add, Flatten, SpatialDropout1D
 from keras.layers import GlobalAveragePooling1D, BatchNormalization, concatenate
 from keras.layers import Reshape,  Concatenate, Lambda, Average
-from keras.models import Sequential, Model
+
 from keras.initializers import Constant
 from keras.layers import add
 from sklearn.utils import class_weight
 from sklearn.utils import compute_class_weight
-from sklearn.model_selection import train_test_split
+
+
+st.set_page_config(page_title='Peptide Stability prediction')
+st.title("Peptide Stability prediction")
+
+
+alphabet = "XACDEFGHIKLMNOPQRSTUVWY"
+
 
 pool_length = 2
 def dot_product(x, kernel):
@@ -302,7 +276,7 @@ if st.button("PREDICT"):
             return a
 
         Sequence = [trans(seq_string)]
-        Sequence = tf.keras.preprocessing.sequence.pad_sequences(Sequence, maxlen=50)
+        Sequence = tensorflow.keras.preprocessing.sequence.pad_sequences(Sequence, maxlen=50)
         Sequence_y = model.predict(Sequence)
 
         def predict_prob(number):
