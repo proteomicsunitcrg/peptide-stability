@@ -52,6 +52,7 @@ from keras.layers import add
 from sklearn.utils import class_weight
 from sklearn.utils import compute_class_weight
 
+import tensorflow
 
 st.set_page_config(page_title='Peptide Stability prediction')
 st.title("Peptide Stability prediction")
