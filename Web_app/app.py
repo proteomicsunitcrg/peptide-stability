@@ -277,7 +277,7 @@ if st.button("PREDICT"):
             return a
 
         Sequence = [trans(seq_string)]
-        Sequence = tensorflow.keras.preprocessing.sequence.pad_sequences(Sequence, maxlen=50)
+        Sequence = tensorflow.keras.preprocessing.sequence.pad_sequences(Sequence, maxlen=50, padding='post')
         Sequence_y = model.predict(Sequence)
 
         def predict_prob(number):
