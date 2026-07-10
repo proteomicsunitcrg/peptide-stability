@@ -3,6 +3,5 @@ name: peps
 channels:
   - bioconda
   - conda-forge
-  - defaults
 dependencies:
   - tensorflow>=2.5.0
