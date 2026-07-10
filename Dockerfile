@@ -4,7 +4,7 @@ RUN apt-get update; apt-get upgrade -y;
 RUN apt install -y build-essential zlib1g-dev libbz2-dev liblzma-dev sudo;  
 
 COPY environment.yml /tmp/environment.yml
-RUN conda env update -f /tmp/environment.yml
+RUN conda config --remove channels defaults && conda env update -f /tmp/environment.yml
 
 RUN echo "conda activate peps" >> ~/.bashrc
 
