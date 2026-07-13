@@ -5,4 +5,4 @@ channels:
   - conda-forge
 dependencies:
   - python=3.9
-  - tensorflow>=2.5.0
+  - tensorflow>=2.5.0,<2.16
