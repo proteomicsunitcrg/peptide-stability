@@ -2,10 +2,10 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
-from keras.layers.core import Dense, Dropout, Activation
+from keras.layers import Dense, Dropout, Activation
 from keras.layers import Embedding
 from keras.layers import LSTM, GRU, SimpleRNN
-from keras.layers.convolutional import Convolution1D, MaxPooling1D
+from keras.layers import Conv1D, MaxPooling1D
 from keras.datasets import imdb
 from keras.callbacks import EarlyStopping,ModelCheckpoint
 from sklearn.model_selection import StratifiedKFold
@@ -16,7 +16,6 @@ from keras.models import load_model
 from sklearn.metrics import confusion_matrix
 from sklearn import metrics
 from keras.preprocessing.text import Tokenizer
-from keras_preprocessing.sequence import pad_sequences
 import random  
 import re,sys
 from keras.layers import Layer, InputSpec
